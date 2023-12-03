@@ -1,0 +1,24 @@
+/* BookList.css */
+.book-list-container {
+  margin-bottom: 20px;
+  min-width: 50%;
+}
+
+.book-list-container h2 {
+  margin-bottom: 10px;
+}
+
+.book-list-container table {
+  border-collapse: collapse;
+}
+
+.book-list-container th,
+.book-list-container td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.book-list-container th {
+  background-color: #f2f2f2;
+}

@@ -1,7 +1,9 @@
 /* BookList.css */
 .book-list-container {
+  display: flex;
   margin-bottom: 20px;
   min-width: 50%;
+  flex-direction: column;
 }
 
 .book-list-container h2 {

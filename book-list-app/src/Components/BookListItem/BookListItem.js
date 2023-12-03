@@ -1,16 +1,31 @@
 import React from "react";
 import { useState } from "react";
 import './BookListItem.css'
+import BookService from '../../Services/BookService'
 
 export default function BookListItem({ book, onEdit, onDelete }) {
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(book.title);
     const [editedAuthor, setEditedAuthor] = useState(book.author);
 
-    const handleSave = () => {
-        onEdit(book.id, editedTitle, editedAuthor);
-        setIsEditing(false);
+    const handleSave = async () => {
+        try {
+            await BookService.updateBook(book.id, { title: editedTitle, author: editedAuthor });
+            onEdit(book.id, editedTitle, editedAuthor);
+            setIsEditing(false);
+        } catch (error) {
+            console.error('Error updating book:', error.message);
+        }
     };
+
+    // const handleDelete = async () => {
+    //     try {
+    //         await BookService.deleteBook(book.id);
+    //         onDelete(book.id);
+    //     } catch (error) {
+    //         console.error('Error deleting book:', error.message);
+    //     }
+    // };
 
     return (
         <tr key={book.id} className="book-list-item">
@@ -31,7 +46,7 @@ export default function BookListItem({ book, onEdit, onDelete }) {
                         />
                     </td>
                     <td>
-                        <button onClick={handleSave}>Save</button>
+                        <button onClick={handleSave} className="save-btn">Save</button>
                     </td>
                 </>
             ) : (

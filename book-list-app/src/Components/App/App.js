@@ -1,36 +1,58 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BookList from "../BookList/BookList";
 import AddBook from "../AddBookForm/AddBookForm";
 import './App.css'
+import BookService from "../../Services/BookService";
 
 export default function App() {
 
-    const [books, setBooks] = useState([
-        { id: 1, title: 'The Great Gatsby', author: 'F. Scott Fitzgerald' },
-        { id: 2, title: 'The Fault in Our Stars', author: 'John Green' },
-        { id: 3, title: 'To Kill a Mockingbird', author: 'Harper Lee' }
-    ]);
+    const [books, setBooks] = useState([]);
 
-    const handleEdit = (id, title, author) => {
-        const updatedBooks = books.map((book) =>
-            book.id === id ? { ...book, title, author } : book
-        );
-        setBooks(updatedBooks);
+    useEffect(() => {
+        async function fetchAllBooks() {
+            try {
+                const fetchedBooks = await BookService.getAllBooks();
+                setBooks(fetchedBooks);
+            }
+            catch (err) {
+                console.error('Error while fetching books: ', err.message);
+            }
+        }
+        fetchAllBooks();
+    }, [])
+
+    const handleEdit = async (id, title, author) => {
+        try {
+            const updatedBook = { title, author };
+            await BookService.updateBook(id, updatedBook);
+            const updatedBooks = books.map((book) =>
+                book.id === id ? { ...book, title, author } : book
+            );
+            setBooks(updatedBooks);
+        } catch (error) {
+            console.error('Error updating book:', error.message);
+        }
     };
 
-    const handleAdd = ({ title, author }) => {
-        const newBook = {
-            id: books.length + 1,
-            title,
-            author,
-        };
-        setBooks([...books, newBook]);
+
+    const handleAdd = async ({ title, author }) => {
+        try {
+            const newBook = await BookService.addBook({ title, author });
+            setBooks([...books, newBook]);
+        } catch (error) {
+            console.error('Error adding book:', error.message);
+        }
     };
 
-    const handleDelete = (id) => {
-        const updatedBooks = books.filter((book) => book.id !== id);
-        setBooks(updatedBooks);
+    const handleDelete = async (id) => {
+        try {
+            await BookService.deleteBook(id);
+            const updatedBooks = books.filter((book) => book.id !== id);
+            setBooks(updatedBooks);
+        } catch (error) {
+            console.error('Error deleting book:', error.message);
+        }
     };
 
     return (

@@ -24,6 +24,10 @@
   .book-list-item button.edit-btn {
     background-color: #007bff;
   }
+
+  .book-list-item button.save-btn {
+    background-color: green;
+  }
   
   .book-list-item button.delete-btn {
     background-color: #dc3545;

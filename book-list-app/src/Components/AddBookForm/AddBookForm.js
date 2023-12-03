@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 import './AddBookForm.css'
+import BookService from '../../Services/BookService';
 
 export default function AddBook({ onAdd }) {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (title && author) {
-            onAdd({ title, author });
-            setTitle('');
-            setAuthor('');
+            try {
+                // const newBook = await BookService.addBook({ title, author });
+                onAdd({ title, author });
+                setTitle('');
+                setAuthor('');
+            } catch (error) {
+                console.error('Error adding book:', error.message);
+            }
         }
     };
 
